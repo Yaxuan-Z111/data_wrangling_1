@@ -6,6 +6,8 @@ output: github_document
 
 ```{r}
 library(tidyverse)
+library(readxl)
+library(haven)
 ```
 
 let's import a dataset.
@@ -55,6 +57,41 @@ pups_df =
   janitor::clean_names(pups_df)
 ```
 
+
+# About excel
+CSVs are really great but sometimes you get an excel file.
+
+```{r}
+mlb_df = 
+  read_excel("data_import_examples/mlb11.xlsx")
+```
+
+Import LotR word counts
+```{r}
+fotr_df = 
+  read_excel("data_import_examples/LotR_Words.xlsx", range = "B3:D6")
+```
+
+# SAS
+```{r}
+Pulse_df = 
+  read_sas("data_import_examples/public_pulse_data.sas7bdat")
+
+Pulse_df = 
+  janitor::clean_names(Pulse_df)
+```
+
+
+#why hate readcsv
+```{r, eval=FALSE}
+litters_df_base =
+  read.csv("data_import_examples/FAS_litters.csv")
+```
+
+#what about data exporting
+```{r}
+write_csv(fotr_df, "data_import_examples/fort_df.csv")
+```
 
 
 
