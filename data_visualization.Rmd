@@ -1,0 +1,24 @@
+---
+title: "Visualization"
+author: "yz5248"
+date: "2025-09-25"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(p8105.datasets)
+```
+
+import the weather data
+```{r}
+data("weather_df")
+```
+
+making our first plot :-)
+```{r}
+ggplot(data = weather_df, mapping = aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
