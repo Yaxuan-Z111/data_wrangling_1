@@ -205,7 +205,9 @@ pups_df =
 join the dataset
 ```{r}
 fas_df = 
-  left_join(pups_df, litters_df, by = "litter_number")|>
-  relocate(litter_number, dose, day_of_treatment)
+  left_join(pups_df, litters_df, by = "litter_number")
+  #relocate(litter_number, dose, day_of_treatment)
 ```
+
+
 

@@ -1,0 +1,46 @@
+---
+title: "vis_2"
+author: "yz5248"
+date: "2025-09-30"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggridges)
+library(ggplot2)
+library(patchwork)
+library(p8105.datasets)
+```
+
+import the weather data
+```{r}
+data("weather_df")
+```
+
+```{r}
+weather_df |> 
+  #filter(tmin>10, tmax>30) |>
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) +
+  labs(
+    x = "minimum daily temp",
+    y = "maximum daily temp",
+    title = "temprature scatterplot",
+    caption = "data from NOAA",
+    color = "location"
+  ) +
+  scale_x_continuous(
+    breaks = c(-20, 0, 25),
+    labels = c("-20C", "0", "25")
+  ) + 
+  scale_y_continuous(
+    trans = "sqrt",
+    limits = c(10, 30)
+  ) + 
+  viridis::scale_color_viridis(
+    name = "Location", 
+    discrete = TRUE
+  )
+```
+
