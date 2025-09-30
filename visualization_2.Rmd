@@ -19,10 +19,11 @@ data("weather_df")
 ```
 
 ```{r}
+ggp_temperature =
 weather_df |> 
   #filter(tmin>10, tmax>30) |>
   ggplot(aes(x = tmin, y = tmax)) + 
-  geom_point(aes(color = name), alpha = .5) +
+  geom_point(aes(color = name), alpha = 0.5) +
   labs(
     x = "minimum daily temp",
     y = "maximum daily temp",
@@ -42,5 +43,70 @@ weather_df |>
     name = "Location", 
     discrete = TRUE
   )
+```
+
+update basic plot
+```{r}
+ggp_temperature + 
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+
+#adding data in geoms
+```{r}
+central_park_df = 
+  weather_df |> 
+  filter(name == "CentralPark_NY")
+
+molokai_df = 
+  weather_df |> 
+  filter(name == "Molokai_HI")
+
+ggplot(data = molokai_df, aes(x = date, y = tmax, color = name)) + 
+  geom_point() + 
+  geom_line(data = central_park_df) 
+```
+
+#patchwork
+combine these works
+```{r}
+ggp_tmax_tmin = 
+  weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  theme(legend.position = "none")
+
+ggp_prcp_density = 
+  weather_df |> 
+  filter(prcp > 0) |> 
+  ggplot(aes(x = prcp, fill = name)) + 
+  geom_density(alpha = .5) +
+  theme(legend.position = "none")
+
+ggp_temp_season = 
+  weather_df |> 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE) +
+  theme(legend.position = "bottom")
+
+(ggp_tmax_tmin + ggp_prcp_density) / ggp_temp_season
+```
+
+#data manipulation
+```{r}
+weather_df |>
+  mutate(name = fct_relevel(name, c("Molokai_HI", "CentralPark_NY", "Waterhole_WA"))) |> 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+```{r}
+weather_df |>
+  mutate(name = fct_reorder(name, tmax)) |> 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+  theme(legend.position = "bottom")
 ```
 
