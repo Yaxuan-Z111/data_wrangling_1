@@ -127,4 +127,40 @@ pulse_df |>
   geom_boxplot()
 ```
 
+make a plot for FAS study
+```{r}
+pups_df = 
+  read_csv("data_import_examples/FAS_pups.csv", na = c("NA", ".", ""), skip = 3) |>
+  janitor::clean_names() |>
+  mutate(
+    sex = case_match(
+      sex,
+      1 ~ "male",
+      2 ~ "female"
+    )
+  )
+
+litters_df =
+  read_csv("data_import_examples/FAS_litters.csv", na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  separate(group, into = c("dose", "tx_day"), sep = 3)
+
+fas_df = 
+  left_join(pups_df, litters_df, by = "litter_number")
+
+fas_df |>
+  select(pd_ears:tx_day) |>
+  pivot_longer(
+    pd_ears:pd_walk,
+    names_to = "outcome",
+    names_prefix = "pd_",
+    values_to = "pn_day"
+  ) |>
+  drop_na() |>
+  ggplot(aes(x = dose, y = pn_day)) +
+  geom_violin() +
+  facet_grid(tx_day~outcome)
+
+  
+```
 
