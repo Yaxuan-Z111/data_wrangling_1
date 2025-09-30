@@ -154,3 +154,26 @@ weather_df |>
     ##  $ legend.position: chr "bottom"
     ##  @ complete: logi FALSE
     ##  @ validate: logi TRUE
+
+what about tidiness
+
+``` r
+pulse_df = 
+  haven::read_sas("data_import_examples/public_pulse_data.sas7bdat") |>
+  janitor::clean_names() |>
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    values_to = "bdi"
+  ) |>
+  mutate(visit = fct_inorder((visit)))
+
+pulse_df |>
+  ggplot(aes(x = visit, y = bdi)) + 
+  geom_boxplot()
+```
+
+    ## Warning: Removed 879 rows containing non-finite outside the scale range
+    ## (`stat_boxplot()`).
+
+![](visualization_2_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
